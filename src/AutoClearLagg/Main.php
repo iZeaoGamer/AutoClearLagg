@@ -33,6 +33,8 @@ class Main extends PluginBase{
 
     /** @var Config $settings */
     public $settings;
+    
+    protected $exemptedEntities = [];
 
     public function onEnable(): void{
         @mkdir($this->getDataFolder());
@@ -74,5 +76,18 @@ class Main extends PluginBase{
         $message = $this->settings->get("mobs-cleared-message");
         $message = str_replace("{COUNT}", $i, $message);
         $this->getServer()->broadcastMessage($message);
+    }
+/**
+     * @param Entity $entity
+     */
+    public function exemptEntity(Entity $entity){
+        $this->exemptedEntities[$entity->getID()] = $entity;
+    }
+    /**
+     * @param Entity $entity
+     * @return bool
+     */
+    public function isEntityExempted(Entity $entity){
+        return isset($this->exemptedEntities[$entity->getID()]);
     }
 }
